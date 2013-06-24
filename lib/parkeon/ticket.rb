@@ -1,9 +1,18 @@
 module Parkeon
   class Ticket
 
-    SELECTOR = "member value array struct"
+    # INCLUSIONS
 
     include Virtus
+
+    # CONSTANTS
+
+    BASE_SELECTOR = "member value array struct"
+    ATTR_SELECTOR = "member"
+    ATTR_NAME_SELECTOR = "name"
+    ATTR_VALUE_SELECTOR = "value"
+
+    # ATTRIBUTES
 
     attribute :id,             Integer
     attribute :zone,           Integer
@@ -12,18 +21,28 @@ module Parkeon
     attribute :utc_start_time, DateTime
     attribute :utc_end_time,   DateTime
 
+    # CLASS METHODS
+
     def self.all
-      session  = Session.create
-      response = session.invoke("get_tickets") {}
-      response.all(SELECTOR).map {|node| from_node(node) }
+      get_tickets.css(BASE_SELECTOR).map {|node| from_node(node) }
     end
 
     def self.from_node(node)
       attributes = {}
-      node.css("member").each do |member|
-        attributes[member.at_css("name").text] = member.at_css("value").text
+
+      node.css(ATTR_SELECTOR).each do |member|
+        key   = member.at_css(ATTR_NAME_SELECTOR)
+        value = member.at_css(ATTR_VALUE_SELECTOR)
+        attributes[key] = value
       end
+
       new(attributes)
+    end
+
+    private
+
+    def self.get_tickets
+      Session.create.invoke("get_tickets") {}
     end
 
   end

@@ -10,10 +10,12 @@ module Parkeon
     def find(selector)
       xml.at_css(selector)
     end
+    alias :at_css :find
 
     def all(selector)
       xml.css(selector)
     end
+    alias :css :all
 
     def code
       response.code
