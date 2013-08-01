@@ -31,9 +31,12 @@ module Parkeon
       attributes = {}
 
       node.css(ATTR_SELECTOR).each do |member|
-        key   = member.at_css(ATTR_NAME_SELECTOR)
-        value = member.at_css(ATTR_VALUE_SELECTOR)
-        attributes[key] = value
+        key   = member.at_css(ATTR_NAME_SELECTOR).try(:text)
+        value = member.at_css(ATTR_VALUE_SELECTOR).try(:text)
+
+        if key && value
+          attributes[key] = value
+        end
       end
 
       new(attributes)
