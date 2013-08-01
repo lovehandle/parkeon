@@ -14,7 +14,7 @@ module Parkeon
 
     # ATTRIBUTES
 
-    attribute :id,             Integer
+    attribute :unique_id,      Integer
     attribute :zone,           Integer
     attribute :user_type,      Integer
     attribute :plate,          String
